@@ -184,6 +184,8 @@ print('Erreur L1 : ',L1_2)
 print('Erreur L2 : ',L2_2)
 print('Erreur Linf : ',Linf_2)
 
+# test
+
 
 
 
