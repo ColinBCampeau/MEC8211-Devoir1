@@ -10,6 +10,8 @@ Le code est divisé en 3 fichiers:
  - Fonction -> fichier qui contient toutes les fonctions
  - Classe -> fichier qui contient la classe paramètre
 
+Le fichier code_stationnaire.py a été produit afin d'évaluer l'équation de diffusion stationnaire, où la dérivée temporelle est nulle.
+
 
 
 
