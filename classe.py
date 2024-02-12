@@ -3,7 +3,7 @@
 OUTIL NUMÉRIQUE DE SIMULATION DE LA DIFFUSION DU SEL DANS UN PILIER EN BÉTON POREUX
                             >FICHIER CLASSE<
 
-AUTEUR: EROJ MOHAMMAD ISHOQ, COLIN BISSONNETTE-CAMPEAU, TRISTAN SÉGUIN
+AUTEUR: EROJ MOHAMMAD ISHOQ, COLIN BISSONNETTE-CAMPEAU, TRISTAN ANCEL-SÉGUIN
 CRÉATION: 04 FÉVRIER 2024
 MISE À JOURS: 11 FÉVRIER 2024
 
@@ -26,11 +26,11 @@ class prm:
     
     S = 8e-9 # Coefficient terme source constant [mol/m^3/s]
     
-    N = 6 # Nombre de points [-]
+    N = 5 # Nombre de points [-]
     
     delta_r = R/(N-1) # Intervalle spatial [m]
     
-    delta_t = 10000000 # Intervalle temporel [s]
+    delta_t = 5e6 # Intervalle temporel [s]
     
     # Création du vecteur de position
     vec_r = np.zeros(N)

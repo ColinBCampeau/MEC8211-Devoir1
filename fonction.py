@@ -3,7 +3,7 @@
 OUTIL NUMÉRIQUE DE SIMULATION DE LA DIFFUSION DU SEL DANS UN PILIER EN BÉTON POREUX
                             >FICHIER FONCTION<
 
-AUTEUR: EROJ MOHAMMAD ISHOQ, COLIN BISSONNETTE-CAMPEAU, TRISTAN SÉGUIN
+AUTEUR: EROJ MOHAMMAD ISHOQ, COLIN BISSONNETTE-CAMPEAU, TRISTAN ANCEL-SÉGUIN
 CRÉATION: 04 FÉVRIER 2024
 MISE À JOURS: 11 FÉVRIER 2024
 
@@ -74,10 +74,16 @@ def f_diff(A, B, C, cas, prm):
 
 
     # Condition de Neumann à i = 0
-
-    mat_C[0,0] = -3
-    mat_C[0,1] = 4
-    mat_C[0,2] = -1
+    
+    if cas == 1:
+        mat_C[0,0] = 1
+        mat_C[0,1] = -1
+    
+    if cas == 2:
+        mat_C[0,0] = -3
+        mat_C[0,1] = 4
+        mat_C[0,2] = -1
+        
     C_ini[0] = 0
 
     # Condition de Dirichlet à i = N

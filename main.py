@@ -2,11 +2,11 @@
 
 OUTIL NUMÉRIQUE DE SIMULATION DE LA DIFFUSION DU SEL DANS UN PILIER EN BÉTON POREUX
 
-                            >FICHIER PRINCIPALE<
+                            >FICHIER PRINCIPAL<
 
-AUTEUR: EROJ MOHAMMAD ISHOQ, COLIN BISSONNETTE-CAMPEAU, TRISTAN SÉGUIN
+AUTEUR: EROJ MOHAMMAD ISHOQ, COLIN BISSONNETTE-CAMPEAU, TRISTAN ANCEL-SÉGUIN
 CRÉATION: 04 FÉVRIER 2024
-MISE À JOURS: 11 FÉVRIER 2024
+MISE À JOUR: 11 FÉVRIER 2024
 
 """
 
@@ -80,7 +80,8 @@ for i in range (len(C_act_vect)):
     Linf = f_Linf(C_act_vect[i], C_anal) # Calcul de l'erreur Linf
     
     # affichage des résultats
-    print('Cas '+ str(i))
+    print('Cas '+ str(i+1))
+    print('Nombre de points :',prm.N)
     print('Erreur L1 : ',L1)
     print('Erreur L2 : ',L2)
     print('Erreur Linf : ',Linf)
@@ -91,7 +92,7 @@ plt.plot(vec_r,C_act_1,label='Cas 1 - numérique')
 plt.plot(vec_r,C_act_2,label='Cas 2 - numérique')
 plt.xlabel("Position radiale [m]")
 plt.ylabel("Concentration [mol/m$^3$]")
-plt.title("Profil de la concentration de sel dans un pillier en \nbéton poreux en fonction de la position radiale")
+plt.title("Profil de la concentration de sel dans un pilier en \nbéton poreux en fonction de la position radiale")
 plt.legend()  
 plt.grid()
 plt.savefig("concentration.png", dpi=300,bbox_inches='tight')
