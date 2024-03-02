@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 
 OUTIL NUMÉRIQUE DE SIMULATION DE LA DIFFUSION DU SEL DANS UN PILIER EN BÉTON POREUX
@@ -13,8 +14,11 @@ MISE À JOUR: 28 FÉVRIER 2024
     
 #%%===================== IMPORTATION DES MODULES ==========================%%#
 
+
 import numpy as np
 import matplotlib.pyplot as plt
+import pandas as pd
+import scipy as sp
 try:
     from fonction import *
     from classe import *
@@ -63,24 +67,35 @@ C_act_2 = f_diff(D,E,F,2,prm)
 
 #%%========================= SOLUTION ANALYTIQUE ==========================%%#
 
-# C_anal = sol_analytique(vec_r,prm)
+df = pd.read_csv('Comsol_profil_81_1e4.csv', delimiter=";")
+data = df["c"].to_numpy()
+position = df["R"].to_numpy()
+#plt.scatter(position,data,label='Comsol') 
+fct_comsol = sp.interpolate.interp1d(position,data,kind='quadratic')
+sol_comsol = fct_comsol(vec_r)
+plt.scatter(vec_r,sol_comsol,label='Comsol') 
+
 
 
 #%%================= VÉRIFICATION DES RÉSULTATS NUMÉRIQUES ==================%%#
 
    
-# L1 = f_L1(C_act_vect, C_anal) # Calcul de l'erreur L1
+L1 = f_L1(C_act_2, sol_comsol) # Calcul de l'erreur L1
     
-# L2 = f_L2(C_act_vect, C_anal) # Calcul de l'erreur L2
+L2 = f_L2(C_act_2, sol_comsol) # Calcul de l'erreur L2
     
-# Linf = f_Linf(C_act_vect, C_anal) # Calcul de l'erreur Linf
+Linf = f_Linf(C_act_2, sol_comsol) # Calcul de l'erreur Linf
     
-# # affichage des résultats
+# affichage des résultats
     
-# print('Nombre de points :',prm.N)
-# print('Erreur L1 : ',L1)
-# print('Erreur L2 : ',L2)
-# print('Erreur Linf : ',Linf)
+print('Nombre de points :',prm.N)
+print('\u0394h = ',R/(prm.N-1))
+print('\u0394t = ' + str("{:.1e}".format(prm.delta_t)))
+print('Erreur L1 : ',L1)
+print('Erreur L2 : ',L2)
+print('Erreur L2 test : ',L2-0.08151636471074895)
+print('Erreur Linf : ',Linf)
+#r'$\sigma(S)$'
     
 # graphique profil de concentration analytique vs numérique
 #plt.scatter(vec_r,C_anal,label='Cas analytique',color='g')   

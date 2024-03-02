@@ -26,7 +26,7 @@ class prm:
     
     S = 8e-9 # Coefficient terme source constant [mol/m^3/s]
     
-    N = 11 # Nombre de points [-]
+    N = 81 # Nombre de points [-]
     
     k = 4e-9 
     
