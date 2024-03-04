@@ -49,18 +49,20 @@ D = prm.D
 
 #t_vect = np.array([0, dt*2])
 
-
+C_vect = np.array([])
 
 for i in range(len(t_vect)):
     S_vect = np.array([])
-    C_vect = np.array([])
+   
     for j in range(len(vec_r)):
         C_r_t =  -9*C0*D*vec_r[j]*np.exp(k*t_vect[i]) + 2*C0*k*vec_r[j]**3*np.exp(k*t_vect[i])
         S_vect = np.append(S_vect, C_r_t)
         
-        C = C0*np.exp(k*t_vect[i])*vec_r[j]**3
+        if i == 1:
         
-        C_vect = np.append(C_vect, C)
+            C = C0*np.exp(k*t_vect[i])*vec_r[j]**3
+            
+            C_vect = np.append(C_vect, C)
         
 
 

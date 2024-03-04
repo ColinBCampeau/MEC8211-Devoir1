@@ -142,24 +142,11 @@ def f_diff(A, B, C, cas,formulation, prm):
             
                 b[i] = C_ini[i] #- prm.S*delta_t
             
-            elif formulation == "mms":
-                
-                #S_vect = np.array([])
-                #C_vect = np.array([])
-                
-                #b[i] = C_ini[i] #- prm.S*delta_t                         
-             
+            elif formulation == "mms" and t == prm.delta_t:
                 
                 C_r_t =  -9*C0*D*vec_r[i]*np.exp(k*t) + 2*C0*k*t**3*np.exp(k*t)
-                #S_vect = np.append(S_vect, C_r_t)
-                         
-                #C_mms = C0*np.exp(k*t)*vec_r[j]**3
-                         
-                #C_vect = np.append(C_vect, C_mms)
                 
-                #print(C_ini[i])
-                
-                b[i] = C_ini[i] - C_r_t#- prm.S*delta_t
+                b[i] = C_ini[i] + C_r_t#- prm.S*delta_t
                 
         # Résolution du système matriciel
         C_act = np.linalg.solve(mat_C,b)
@@ -171,7 +158,7 @@ def f_diff(A, B, C, cas,formulation, prm):
         C_ini = C_act.copy()
         t += prm.delta_t
         c += 1
-        
+    
     return C_act
 
 
