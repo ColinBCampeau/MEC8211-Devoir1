@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 
 OUTIL NUMÉRIQUE DE SIMULATION DE LA DIFFUSION DU SEL DANS UN PILIER EN BÉTON POREUX
@@ -48,7 +47,9 @@ B[1:] = 1 + prm.D*delta_t/(vec_r[1:]*delta_r) + 2*prm.D*delta_t/delta_r**2 + prm
 C[1:] = -(prm.D*delta_t/(vec_r[1:]*delta_r)+prm.D*delta_t/delta_r**2)  # Coefficient devant C_i+1 (vecteur)
 
 # Génération du vecteur concentration actuelle cas 1 obtenue de manière numérique
-C_act_1 = f_diff(A,B,C,1,prm)
+C_act_1 = f_diff(A,B,C,1,"num",prm)
+
+C_mms_1 = f_diff(A,B,C,1,"mms",prm)
     
     
 #%%========================= CAS 2 ==========================%%#
@@ -63,7 +64,9 @@ E = 1 + 2*prm.D*delta_t/delta_r**2 + prm.k*delta_t  # Coefficient devant C_i (sc
 F[1:] = -(prm.D*delta_t/(2*vec_r[1:]*delta_r)+prm.D*delta_t/delta_r**2)  # Coefficient devant C_i+1 (vecteur)
 
 # Génération du vecteur concentration actuelle cas 2 obtenue de manière numérique
-C_act_2 = f_diff(D,E,F,2,prm)
+C_act_2 = f_diff(D,E,F,2,"num",prm)
+
+C_mms_2 = f_diff(D,E,F,2,"mms",prm)
 
 #%%========================= SOLUTION ANALYTIQUE ==========================%%#
 
@@ -99,8 +102,8 @@ print('Erreur Linf : ',Linf)
     
 # graphique profil de concentration analytique vs numérique
 #plt.scatter(vec_r,C_anal,label='Cas analytique',color='g')   
-plt.plot(vec_r,C_act_1,label='Schéma d\'ordre 1 - numérique')
-plt.plot(vec_r,C_act_2,label='Schéma d\'ordre 2 - numérique')
+plt.plot(vec_r,C_act_1,"-r", label='Schéma d\'ordre 1 - numérique')
+plt.plot(vec_r,C_act_2,"-g",label='Schéma d\'ordre 2 - numérique')
 plt.xlabel("Position radiale [m]")
 plt.ylabel("Concentration [mol/m$^3$]")
 plt.title("Profil de la concentration de sel dans un pilier en béton \nporeux en fonction de la position radiale après " + str("{:.1e}".format(prm.t_fin)) + ' s')

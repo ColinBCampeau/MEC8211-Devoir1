@@ -38,7 +38,7 @@ def sol_analytique(x,prm):
     return C
 
 #%%================= FONCTION MÉTHODE DIFFERENCES FINIS ====================%%#
-def f_diff(A, B, C, cas, prm):
+def f_diff(A, B, C, cas,formulation, prm):
     
     """
     Fonction qui permet de calculer la solution numérique du problème de diffusion
@@ -53,6 +53,8 @@ def f_diff(A, B, C, cas, prm):
         C -> Coefficient devant C_i+1 (vecteur)
         
         cas -> 1 ou 2
+        
+        formulation -> num = différence finie ou mms = Méthode des solutions manufacturées
         
         prm -> paramètres
         
@@ -98,6 +100,28 @@ def f_diff(A, B, C, cas, prm):
     c = 0
     t = 0
     
+    # méthode MMS
+    
+    if formulation == "mms":
+    
+        #N = prm.N
+    
+        #T = prm.t_fin
+    
+        #dt = prm.delta_t
+    
+        #t_vect = np.arange(0, T+dt,dt)
+    
+        vec_r = prm.vec_r
+    
+        C0 = prm.Ce
+    
+        k = prm.k
+    
+        D = prm.D
+        
+       
+    
     while t <= prm.t_fin:
         
         for i in range(1,len(C_ini)-1):
@@ -114,7 +138,28 @@ def f_diff(A, B, C, cas, prm):
                 mat_C[i,i] = B
                 mat_C[i,i+1] = C[i]
             
-            b[i] = C_ini[i] #- prm.S*delta_t
+            if formulation == "num":
+            
+                b[i] = C_ini[i] #- prm.S*delta_t
+            
+            elif formulation == "mms":
+                
+                #S_vect = np.array([])
+                #C_vect = np.array([])
+                
+                #b[i] = C_ini[i] #- prm.S*delta_t                         
+             
+                
+                C_r_t =  -9*C0*D*vec_r[i]*np.exp(k*t) + 2*C0*k*t**3*np.exp(k*t)
+                #S_vect = np.append(S_vect, C_r_t)
+                         
+                #C_mms = C0*np.exp(k*t)*vec_r[j]**3
+                         
+                #C_vect = np.append(C_vect, C_mms)
+                
+                #print(C_ini[i])
+                
+                b[i] = C_ini[i] - C_r_t#- prm.S*delta_t
                 
         # Résolution du système matriciel
         C_act = np.linalg.solve(mat_C,b)
