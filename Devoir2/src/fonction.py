@@ -98,10 +98,9 @@ def f_diff(A, B, C, cas,formulation, prm):
     if formulation == "num":
         C_ini[-1] = prm.Ce
 
-
         # Algorithme de différences finies
     
-        b = C_ini.copy()
+    b = C_ini.copy()
     c = 0
     t = 0
     
@@ -127,20 +126,11 @@ def f_diff(A, B, C, cas,formulation, prm):
 
         if formulation == "mms":
 
-            
             C_ini[-1] = prm.Ce*prm.R**3*np.exp(k*t)
             
-            #C_ini[-1] = prm.Ce*prm.R**3*np.exp(-k*t)
+            #C_ini[-1] = np.exp(R**2)*np.exp(k*t)
             
-            #C_ini[-1] = prm.R**3*np.exp(-k*t)
-            
-            #C_ini[-1] =  (R**2 + R)*np.exp(-k*t)
-            
-            #C_ini[-1] = (R**3 + R)*np.exp(t/prm.t_fin)
-            
-            #C_ini[0] = R*np.exp(t/prm.t_fin)
-            
-            #C_ini[-1] = C0 + R**2*np.exp(-t/T0)
+            C_ini[0] = 0
             
             b = C_ini.copy()
         
@@ -166,20 +156,14 @@ def f_diff(A, B, C, cas,formulation, prm):
                 
                 C_r_t = -9*C0*D*vec_r[i]*np.exp(k*t) + 2*C0*k*vec_r[i]**3*np.exp(k*t)
                 
-                #C_r_t = -9*C0*D*vec_r[i]*np.exp(-k*t)
-                
-                #C_r_t = -9*D*vec_r[i]*np.exp(-k*t)
-                
-                #C_r_t =  -9*D*vec_r[i]*np.exp(-k*t)
-                
-                #C_r_t = -9*D*vec_r[i]*np.exp(t/prm.t_fin) + k*(R + vec_r[i]**3)*np.exp(t/prm.t_fin) + (R + vec_r[i]**3)*np.exp(t/prm.t_fin)/prm.t_fin
-                
-                #C_r_t = -4*D*np.exp(-t/T0) + k*(C0 + vec_r[i]**2*np.exp(-t/T0)) - vec_r[i]**2*np.exp(-t/T0)/T0
+                #C_r_t = -D*(4*vec_r[i]**3*np.exp(vec_r[i]**2)*np.exp(k*t) + 4*vec_r[i]*np.exp(vec_r[i]**2)*np.exp(k*t))/vec_r[i] + 2*k*np.exp(vec_r[i]**2)*np.exp(k*t)
                 
                 b[i] =  C_ini[i] + C_r_t*delta_t
+        
 
         # Résolution du système matriciel
         C_act = np.linalg.solve(mat_C,b)
+        
         
         # Calcul du critère d'arrêt
         #crit = np.linalg.norm(C_act-C_ini)

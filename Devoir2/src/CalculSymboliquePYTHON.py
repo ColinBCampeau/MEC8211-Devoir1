@@ -5,9 +5,10 @@ r, t, T0, C0, R, k, D, k= symbols('r t T0 C0 R k D k')
 
 C = Function('C')(r, t) # Définition de la fonction symbolique et de ses variables
 
-#C = exp(t/T0)*(r**3+R) # choix de la solution MMS
 
-C = C0*exp(k*t)*r**3
+C = C0*exp(k*t)*(r)**3
+
+#C = exp(r**2)*exp(k*t)
 
 
 dCdt = diff(C, t)

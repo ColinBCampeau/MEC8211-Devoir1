@@ -91,21 +91,8 @@ C_MMS = prm.Ce*np.exp(prm.k*vec_t[-1])*vec_r**3
 
 C_MMS_t = prm.Ce*np.exp(prm.k*vec_t)*vec_r[40]**3
 
-# C_MMS = prm.Ce*vec_r**3*np.exp(-prm.k*vec_t[-1])
-
-# C_MMS_t = prm.Ce*vec_r[40]**3*np.exp(-prm.k*vec_t)
-
-#C_MMS = vec_r**3*np.exp(-prm.k*vec_t[-1])
-
-#C_MMS_t = vec_r[40]**3*np.exp(-prm.k*vec_t)
-
-#C_MMS = (prm.R + vec_r**3)*np.exp(vec_t[-1]/prm.t_fin)
-
-#C_MMS_t = (prm.R + vec_r[40]**3)*np.exp(vec_t/prm.t_fin)
-
-#C_MMS = prm.Ce + vec_r**2*np.exp(-vec_t[-1]/prm.t_fin)
-
-
+#C_MMS = np.exp(vec_r**2)*np.exp(prm.k*vec_t[-1])
+#C_MMS_t = np.exp(vec_r[40]**2)*np.exp(prm.k*vec_t)
 #%%============ VÉRIFICATION DES RÉSULTATS NUMÉRIQUES - COMSOL =============%%#
 
    
@@ -189,7 +176,7 @@ plt.plot(vec_t,Cr0_mms_2,label='MMS - NUMÉRIQUE - \u0394t = '+ str("{:.1e}".for
 plt.plot(vec_t,C_MMS_t,label='MMS - ANALYTIQUE') 
 plt.xlabel("Temps [s]")
 plt.ylabel("Concentration [mol/m$^3$]")
-plt.title("Profil de la concentration de sel en fonction du temps \nà R = 0 m")
+plt.title("Profil de la concentration de sel en fonction du temps \nà R = "+ str(vec_r[40])+" m")
 plt.legend()  
 plt.grid()
 plt.savefig("concentration_t_mms.png", dpi=300,bbox_inches='tight')
