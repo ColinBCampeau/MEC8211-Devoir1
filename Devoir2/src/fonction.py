@@ -14,6 +14,8 @@ import numpy as np
 
 from classe import *
 
+from matplotlib import pyplot as plt
+
 #%%===================== FONCTION SOLUTION ANALYTIQUE ==========================%%#
 def sol_analytique(x,prm):
     
@@ -92,7 +94,8 @@ def f_diff(A, B, C, cas,formulation, prm):
     # Condition de Dirichlet à i = N
 
     mat_C[-1,-1] = 1
-    C_ini[-1] = prm.Ce
+    if formulation == "num":
+        C_ini[-1] = prm.Ce
 
 
     # Algorithme de différences finies
@@ -109,7 +112,7 @@ def f_diff(A, B, C, cas,formulation, prm):
     
         #T = prm.t_fin
     
-        #dt = prm.delta_t
+        dt = prm.delta_t
     
         #t_vect = np.arange(0, T+dt,dt)
     
@@ -120,10 +123,17 @@ def f_diff(A, B, C, cas,formulation, prm):
         k = prm.k
     
         D = prm.D
-        
        
     
     while t <= prm.t_fin:
+
+        if formulation == "mms":
+            
+            #C_ini[-1] = prm.Ce*prm.R**2*np.exp(prm.k*t)
+            
+            C_ini[-1] = prm.Ce*prm.R**3*np.exp(k*t)
+            
+            b = C_ini.copy()
         
         for i in range(1,len(C_ini)-1):
             
@@ -143,11 +153,13 @@ def f_diff(A, B, C, cas,formulation, prm):
             
                 b[i] = C_ini[i] #- prm.S*delta_t
             
-            elif formulation == "mms" and t == prm.delta_t:
+            elif formulation == "mms":
+
+                #C_r_t = -4*C0*D*np.exp(k*t) + 2*C0*k*vec_r[i]**2*np.exp(k*t)
                 
-                C_r_t =  -9*C0*D*vec_r[i]*np.exp(k*t) + 2*C0*k*t**3*np.exp(k*t)
-                
-                b[i] = C_ini[i] + C_r_t#- prm.S*delta_t
+                C_r_t = -9*C0*D*vec_r[i]*np.exp(k*t) + 2*C0*k*vec_r[i]**3*np.exp(k*t)
+
+                b[i] = C_ini[i] + C_r_t*delta_t
                 
         # Résolution du système matriciel
         C_act = np.linalg.solve(mat_C,b)

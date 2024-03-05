@@ -85,8 +85,9 @@ temps = dft["Time"].to_numpy()
 fct_comsol_temporel = sp.interpolate.interp1d(temps,data_t,kind='quadratic')
 sol_comsol_temporel = fct_comsol_temporel(vec_t)
 
+#%%===================== SOLUTION MMS VS NUMÉRIQUE ==========================%%#
 
-
+C_MMS = prm.Ce*np.exp(prm.k*vec_t[-1])*vec_r**3
 
 #%%================= VÉRIFICATION DES RÉSULTATS NUMÉRIQUES ==================%%#
 
