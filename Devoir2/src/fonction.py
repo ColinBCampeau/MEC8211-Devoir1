@@ -64,9 +64,10 @@ def f_diff(A, B, C, cas,formulation, prm):
     
     """
     
-    N = prm.N
-    
+    N = prm.N 
     delta_t = prm.delta_t
+    vec_t = np.arange(0,prm.t_fin+delta_t,delta_t)
+    Cr0 = np.zeros(len(vec_t))
     
     # Initialisation des vecteurs de concentration
     C_ini = np.zeros(N)
@@ -157,9 +158,10 @@ def f_diff(A, B, C, cas,formulation, prm):
         # Actualisation de la solution (t+1 --> t)
         C_ini = C_act.copy()
         t += prm.delta_t
+        Cr0[c] = C_act[0]
         c += 1
     
-    return C_act
+    return C_act, Cr0
 
 
         

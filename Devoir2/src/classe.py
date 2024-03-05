@@ -32,7 +32,7 @@ class prm:
     
     delta_r = R/(N-1) # Intervalle spatial [m]
     
-    delta_t = 1e5 # Intervalle temporel [s]
+    delta_t = 1e7 # Intervalle temporel [s]
     
     t_fin = 1e9 # Temps simulé [s]
     
