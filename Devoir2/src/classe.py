@@ -28,13 +28,12 @@ class prm:
     
     N = 81 # Nombre de points [-]
     
-    k = 4e-9 
-    
     delta_r = R/(N-1) # Intervalle spatial [m]
     
     delta_t = 1e7 # Intervalle temporel [s]
     
     t_fin = 1e9 # Temps simulé [s]
+    
     
     # Création du vecteur de position
     vec_r = np.zeros(N)

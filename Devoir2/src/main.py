@@ -85,11 +85,28 @@ temps = dft["Time"].to_numpy()
 fct_comsol_temporel = sp.interpolate.interp1d(temps,data_t,kind='quadratic')
 sol_comsol_temporel = fct_comsol_temporel(vec_t)
 
-#%%===================== SOLUTION MMS VS NUMÉRIQUE ==========================%%#
+#%%===================== SOLUTION MMS ANALYTIQUE ==========================%%#
 
 C_MMS = prm.Ce*np.exp(prm.k*vec_t[-1])*vec_r**3
 
-#%%================= VÉRIFICATION DES RÉSULTATS NUMÉRIQUES ==================%%#
+C_MMS_t = prm.Ce*np.exp(prm.k*vec_t)*vec_r[40]**3
+
+# C_MMS = prm.Ce*vec_r**3*np.exp(-prm.k*vec_t[-1])
+
+# C_MMS_t = prm.Ce*vec_r[40]**3*np.exp(-prm.k*vec_t)
+
+#C_MMS = vec_r**3*np.exp(-prm.k*vec_t[-1])
+
+#C_MMS_t = vec_r[40]**3*np.exp(-prm.k*vec_t)
+
+#C_MMS = (prm.R + vec_r**3)*np.exp(vec_t[-1]/prm.t_fin)
+
+#C_MMS_t = (prm.R + vec_r[40]**3)*np.exp(vec_t/prm.t_fin)
+
+#C_MMS = prm.Ce + vec_r**2*np.exp(-vec_t[-1]/prm.t_fin)
+
+
+#%%============ VÉRIFICATION DES RÉSULTATS NUMÉRIQUES - COMSOL =============%%#
 
    
 L1 = f_L1(C_act_2, sol_comsol) # Calcul de l'erreur L1 - Comsol
@@ -129,12 +146,57 @@ plt.title("Profil de la concentration de sel en fonction du temps \nà R = 0 m")
 plt.legend()  
 plt.grid()
 plt.savefig("concentration_t.png", dpi=300,bbox_inches='tight')
-
+plt.show()
 
 L2_t = f_L2(Cr0_2, sol_comsol_temporel)
 print('Erreur L2 (temporel) :', L2_t) 
 
 
+#%%============= VÉRIFICATION DES RÉSULTATS NUMÉRIQUES - MMS ===============%%#
+
+L1 = f_L1(C_mms_2, C_MMS) # Calcul de l'erreur L1 - MMS
+    
+L2 = f_L2(C_mms_2, C_MMS) # Calcul de l'erreur L2 - MMS
+    
+Linf = f_Linf(C_mms_2, C_MMS) # Calcul de l'erreur Linf - MMS
+    
+# affichage des résultats
+print("============= VÉRIFICATION DES RÉSULTATS NUMÉRIQUES - MMS ===============\n")    
+print('Nombre de points :',prm.N)
+print('\u0394h = ',R/(prm.N-1))
+print('\u0394t = ' + str("{:.1e}".format(prm.delta_t)))
+print('Erreurs MMS')
+print('Erreur L1 : ',L1)
+print('Erreur L2 : ',L2)
+print('Erreur Linf : ',Linf)
+
+    
+# graphique profil de concentration MMS analytique vs MMS numérique
+
+#plt.scatter(vec_r,C_mms_2,label='MMS - NUMÉRIQUE - ' +str(N)+' éléments')
+plt.plot(vec_r,C_mms_2,"b",label='MMS - NUMÉRIQUE - ' +str(N)+' éléments')
+plt.plot(vec_r,C_MMS,"--r", label='MMS - ANALYTIQUE') 
+plt.xlabel("Position radiale [m]")
+plt.ylabel("Concentration [mol/m$^3$]")
+plt.title("Profil de la concentration de sel en fonction de la position radiale \naprès " + str("{:.1e}".format(prm.t_fin)) + ' s ')
+plt.legend()  
+plt.grid()
+plt.savefig("concentration_h_mms.png", dpi=300,bbox_inches='tight')
+plt.show()
+
+
+plt.plot(vec_t,Cr0_mms_2,label='MMS - NUMÉRIQUE - \u0394t = '+ str("{:.1e}".format(prm.delta_t)))
+plt.plot(vec_t,C_MMS_t,label='MMS - ANALYTIQUE') 
+plt.xlabel("Temps [s]")
+plt.ylabel("Concentration [mol/m$^3$]")
+plt.title("Profil de la concentration de sel en fonction du temps \nà R = 0 m")
+plt.legend()  
+plt.grid()
+plt.savefig("concentration_t_mms.png", dpi=300,bbox_inches='tight')
+
+
+L2_t = f_L2(Cr0_mms_2, C_MMS_t)
+print('Erreur L2 (temporel) :', L2_t) 
 
 
 

@@ -85,10 +85,11 @@ def f_diff(A, B, C, cas,formulation, prm):
         mat_C[0,1] = -1
     
     if cas == 2:
+        
         mat_C[0,0] = -3
         mat_C[0,1] = 4
         mat_C[0,2] = -1
-        
+
     C_ini[0] = 0
 
     # Condition de Dirichlet à i = N
@@ -98,23 +99,15 @@ def f_diff(A, B, C, cas,formulation, prm):
         C_ini[-1] = prm.Ce
 
 
-    # Algorithme de différences finies
-
-    b = C_ini.copy()
+        # Algorithme de différences finies
+    
+        b = C_ini.copy()
     c = 0
     t = 0
     
     # méthode MMS
     
     if formulation == "mms":
-    
-        #N = prm.N
-    
-        #T = prm.t_fin
-    
-        dt = prm.delta_t
-    
-        #t_vect = np.arange(0, T+dt,dt)
     
         vec_r = prm.vec_r
     
@@ -123,15 +116,31 @@ def f_diff(A, B, C, cas,formulation, prm):
         k = prm.k
     
         D = prm.D
+        
+        R = prm.R
+        
+        T0 = prm.t_fin
        
     
     while t <= prm.t_fin:
+        
 
         if formulation == "mms":
-            
-            #C_ini[-1] = prm.Ce*prm.R**2*np.exp(prm.k*t)
+
             
             C_ini[-1] = prm.Ce*prm.R**3*np.exp(k*t)
+            
+            #C_ini[-1] = prm.Ce*prm.R**3*np.exp(-k*t)
+            
+            #C_ini[-1] = prm.R**3*np.exp(-k*t)
+            
+            #C_ini[-1] =  (R**2 + R)*np.exp(-k*t)
+            
+            #C_ini[-1] = (R**3 + R)*np.exp(t/prm.t_fin)
+            
+            #C_ini[0] = R*np.exp(t/prm.t_fin)
+            
+            #C_ini[-1] = C0 + R**2*np.exp(-t/T0)
             
             b = C_ini.copy()
         
@@ -154,13 +163,21 @@ def f_diff(A, B, C, cas,formulation, prm):
                 b[i] = C_ini[i] #- prm.S*delta_t
             
             elif formulation == "mms":
-
-                #C_r_t = -4*C0*D*np.exp(k*t) + 2*C0*k*vec_r[i]**2*np.exp(k*t)
                 
                 C_r_t = -9*C0*D*vec_r[i]*np.exp(k*t) + 2*C0*k*vec_r[i]**3*np.exp(k*t)
-
-                b[i] = C_ini[i] + C_r_t*delta_t
                 
+                #C_r_t = -9*C0*D*vec_r[i]*np.exp(-k*t)
+                
+                #C_r_t = -9*D*vec_r[i]*np.exp(-k*t)
+                
+                #C_r_t =  -9*D*vec_r[i]*np.exp(-k*t)
+                
+                #C_r_t = -9*D*vec_r[i]*np.exp(t/prm.t_fin) + k*(R + vec_r[i]**3)*np.exp(t/prm.t_fin) + (R + vec_r[i]**3)*np.exp(t/prm.t_fin)/prm.t_fin
+                
+                #C_r_t = -4*D*np.exp(-t/T0) + k*(C0 + vec_r[i]**2*np.exp(-t/T0)) - vec_r[i]**2*np.exp(-t/T0)/T0
+                
+                b[i] =  C_ini[i] + C_r_t*delta_t
+
         # Résolution du système matriciel
         C_act = np.linalg.solve(mat_C,b)
         
@@ -171,6 +188,10 @@ def f_diff(A, B, C, cas,formulation, prm):
         C_ini = C_act.copy()
         t += prm.delta_t
         Cr0[c] = C_act[0]
+        
+        if formulation == "mms":
+            Cr0[c] = C_act[40]
+        
         c += 1
     
     return C_act, Cr0

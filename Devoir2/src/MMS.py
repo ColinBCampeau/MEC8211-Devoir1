@@ -46,16 +46,15 @@ k = prm.k
 D = prm.D
 
 
-
-#t_vect = np.array([0, dt*2])
-
 C_vect = np.array([])
 
 for i in range(len(t_vect)):
     S_vect = np.array([])
    
     for j in range(len(vec_r)):
-        C_r_t =  -9*C0*D*vec_r[j]*np.exp(k*t_vect[i]) + 2*C0*k*vec_r[j]**3*np.exp(k*t_vect[i])
+        #C_r_t =  -9*C0*D*vec_r[j]*np.exp(k*t_vect[i]) + 2*C0*k*vec_r[j]**3*np.exp(k*t_vect[i])
+        C_r_t = -9*C0*D*vec_r[j]*np.exp(t) + C0*k*vec_r[j]**3*exp(t) + C0*r**3*exp(t)
+        
         S_vect = np.append(S_vect, C_r_t)
 
 
