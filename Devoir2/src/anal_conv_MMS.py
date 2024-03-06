@@ -67,39 +67,115 @@ for i in range(len(N_vect)):
     dt_vect = np.append(dt_vect, prm.delta_t)
 
 # Analyse de la convergence spatiale
-dr_reg = dr_vect[5:]
-L2_reg = L2_vect[5:]
-log_dr_reg = np.log(dr_reg)
-log_L2_reg = np.log(L2_reg)
-pente_reg, ordonne_reg, _, _, _ = linregress(log_dr_reg, log_L2_reg)
-f_reg = np.exp(ordonne_reg) * dr_vect**pente_reg
-plt.plot(dr_vect, L2_vect, 'o', label='MMS', markersize=8)
-plt.plot(dr_vect, f_reg, 'r--', label = r'Erreur $L_2 = {:.2e} \cdot \Delta r^{{{:.2f}}}$'.format(np.exp(ordonne_reg), pente_reg))
+h = dr_vect
+vec_l2 = L2_vect
+
+# Ajuster une loi de puissance à toutes les valeurs (en utilisant np.polyfit avec logarithmes)
+coefficients = np.polyfit(np.log(h[5:]), np.log(vec_l2[5:]), 1)
+exponent = coefficients[0]
+
+# Fonction de régression en termes de logarithmes
+fit_function_log = lambda x: exponent * x + coefficients[1]
+
+# Fonction de régression en termes originaux
+fit_function = lambda x: np.exp(fit_function_log(np.log(x)))
+
+# Extrapoler la valeur prédite pour la dernière valeur de h_values
+extrapolated_value = fit_function(h[0])
+
+# Tracer le graphique en échelle log-log avec des points et la courbe de régression extrapolée
+plt.figure(figsize=(8, 6))
+plt.scatter(h, vec_l2, marker='o', color='b', label='Données numériques obtenues')
+plt.plot(h, fit_function(h), linestyle='--', color='r', label='Régression en loi de puissance')
+
+# Marquer la valeur extrapolée
+#plt.scatter(h_values[-1], extrapolated_value, marker='x', color='g', label='Extrapolation')
+
+# Ajouter des étiquettes et un titre au graphique
+plt.title('Convergence d\'ordre 2\n de l\'erreur $L_2$ en fonction de $Δx$',
+          fontsize=14, fontweight='bold', y=1.02)  # Le paramètre y règle la position verticale du titre
+
+plt.xlabel('Taille de maille $Δx$ (m)', fontsize=12, fontweight='bold')  
+plt.ylabel('Erreur $L_2$ (mol/m$^3$)', fontsize=12, fontweight='bold')
+
+# Rendre les axes plus gras
+plt.gca().spines['bottom'].set_linewidth(2)
+plt.gca().spines['left'].set_linewidth(2)
+plt.gca().spines['right'].set_linewidth(2)
+plt.gca().spines['top'].set_linewidth(2)
+
+# Placer les marques de coche à l'intérieur et les rendre un peu plus longues
+plt.tick_params(width=2, which='both', direction='in', top=True, right=True, length=6)
+
+# Afficher l'équation de la régression en loi de puissance
+equation_text = f'$L_2 = {np.exp(coefficients[1]):.4f} \\times Δx^{{{exponent:.4f}}}$'
+equation_text_obj = plt.text(0.05, 0.05, equation_text, fontsize=12, transform=plt.gca().transAxes, color='k')
+
+# Déplacer la zone de texte
+equation_text_obj.set_position((0.5, 0.4))
+
+
+# Afficher le graphique
 plt.xscale('log')
 plt.yscale('log')
-plt.xlabel(r'$\Delta r$ $[m]$')
-plt.ylabel(r'Erreur $L_2$ $[mol/m^3]$')
-plt.title(r'Erreur de la norme $L_2$ en fonction de la taille des éléments')
+plt.grid(True)
 plt.legend()
-plt.grid()
-plt.savefig("L2_mms_dr.png", dpi=300,bbox_inches='tight')
+plt.savefig('L2_mms_dr.png',dpi=200)
 plt.show()
 
 # Analyse de la convergence temporelle
-dt_reg = dt_vect[5:]
-L2_t_reg = L2_t_vect[5:]
-log_dt_reg = np.log(dt_reg)
-log_L2_t_reg = np.log(L2_t_reg)
-pente_reg, ordonne_reg, _, _, _ = linregress(log_dt_reg, log_L2_t_reg)
-f_reg = np.exp(ordonne_reg) * dt_vect**pente_reg
-plt.plot(dt_vect, L2_t_vect, 'o', label='MMS', markersize=8)
-plt.plot(dt_vect, f_reg, 'r--', label= r'Erreur $L_2 = {:.2e} \cdot \Delta t^{{{:.2f}}}$'.format(np.exp(ordonne_reg), pente_reg))
+v_delta_t = dt_vect
+vec_l2_t = L2_t_vect
+
+# Ajuster une loi de puissance à toutes les valeurs (en utilisant np.polyfit avec logarithmes)
+coefficients = np.polyfit(np.log(v_delta_t[5:]), np.log(vec_l2_t[5:]), 1)
+exponent = coefficients[0]
+
+# Fonction de régression en termes de logarithmes
+fit_function_log = lambda x: exponent * x + coefficients[1]
+
+# Fonction de régression en termes originaux
+fit_function = lambda x: np.exp(fit_function_log(np.log(x)))
+
+# Extrapoler la valeur prédite pour la dernière valeur de h_values
+extrapolated_value = fit_function(v_delta_t[0])
+
+# Tracer le graphique en échelle log-log avec des points et la courbe de régression extrapolée
+plt.figure(figsize=(8, 6))
+plt.scatter(v_delta_t, vec_l2_t, marker='o', color='b', label='Données numériques obtenues')
+plt.plot(v_delta_t, fit_function(v_delta_t), linestyle='--', color='r', label='Régression en loi de puissance')
+
+# Marquer la valeur extrapolée
+#plt.scatter(h_values[-1], extrapolated_value, marker='x', color='g', label='Extrapolation')
+
+# Ajouter des étiquettes et un titre au graphique
+plt.title('Convergence d\'ordre 1\n de l\'erreur $L_2$ en fonction de $Δt$',
+          fontsize=14, fontweight='bold', y=1.02)  # Le paramètre y règle la position verticale du titre
+
+plt.xlabel('Taille d\'intervalle $Δt$ (s)', fontsize=12, fontweight='bold')  
+plt.ylabel('Erreur $L_2$ (mol/m$^3$)', fontsize=12, fontweight='bold')
+
+# Rendre les axes plus gras
+plt.gca().spines['bottom'].set_linewidth(2)
+plt.gca().spines['left'].set_linewidth(2)
+plt.gca().spines['right'].set_linewidth(2)
+plt.gca().spines['top'].set_linewidth(2)
+
+# Placer les marques de coche à l'intérieur et les rendre un peu plus longues
+plt.tick_params(width=2, which='both', direction='in', top=True, right=True, length=6)
+
+# Afficher l'équation de la régression en loi de puissance
+equation_text = f'$L_2 = {np.exp(coefficients[1]):.2e} \\times Δt^{{{exponent:.4f}}}$'
+equation_text_obj = plt.text(0.05, 0.05, equation_text, fontsize=12, transform=plt.gca().transAxes, color='k')
+
+# Déplacer la zone de texte
+equation_text_obj.set_position((0.5, 0.4))
+
+
+# Afficher le graphique
 plt.xscale('log')
 plt.yscale('log')
-plt.xlabel(r'$\Delta t$ [s]')
-plt.ylabel(r'Erreur $L_2$ $[mol/m^3]$')
-plt.title(r'Erreur de la norme $L_2$ en fonction du pas de temps')
+plt.grid(True)
 plt.legend()
-plt.grid()
-plt.savefig("L2_mms_dt.png", dpi=300,bbox_inches='tight')
+plt.savefig('L2_mms_dt.png',dpi=200)
 plt.show()
