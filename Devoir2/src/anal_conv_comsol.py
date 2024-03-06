@@ -55,10 +55,10 @@ plt.plot(h, fit_function(h), linestyle='--', color='r', label='Régression en lo
 #plt.scatter(h_values[-1], extrapolated_value, marker='x', color='g', label='Extrapolation')
 
 # Ajouter des étiquettes et un titre au graphique
-plt.title('Convergence d\'ordre 2\n de l\'erreur $L_2$ en fonction de $Δx$',
+plt.title('Convergence d\'ordre 2\n de l\'erreur $L_2$ en fonction de $Δr$',
           fontsize=14, fontweight='bold', y=1.02)  # Le paramètre y règle la position verticale du titre
 
-plt.xlabel('Taille de maille $Δx$ (m)', fontsize=12, fontweight='bold')  
+plt.xlabel('Taille de maille $Δr$ (m)', fontsize=12, fontweight='bold')  
 plt.ylabel('Erreur $L_2$ (mol/m$^3$)', fontsize=12, fontweight='bold')
 
 # Rendre les axes plus gras
@@ -71,7 +71,7 @@ plt.gca().spines['top'].set_linewidth(2)
 plt.tick_params(width=2, which='both', direction='in', top=True, right=True, length=6)
 
 # Afficher l'équation de la régression en loi de puissance
-equation_text = f'$L_2 = {np.exp(coefficients[1]):.4f} \\times Δx^{{{exponent:.4f}}}$'
+equation_text = f'$L_2 = {np.exp(coefficients[1]):.4f} \\times Δr^{{{exponent:.4f}}}$'
 equation_text_obj = plt.text(0.05, 0.05, equation_text, fontsize=12, transform=plt.gca().transAxes, color='k')
 
 # Déplacer la zone de texte
