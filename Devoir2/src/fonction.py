@@ -109,6 +109,10 @@ def f_diff(A, B, C, cas,formulation, prm):
     if formulation == "mms":
     
         vec_r = prm.vec_r
+        
+        for i in range(1,len(C_ini)-1):
+
+            C_ini[i] = prm.Ce*vec_r[i]**3
     
         C0 = prm.Ce
     
@@ -135,6 +139,7 @@ def f_diff(A, B, C, cas,formulation, prm):
             b = C_ini.copy()
         
         for i in range(1,len(C_ini)-1):
+            
             
             if cas ==1:
             
@@ -174,7 +179,7 @@ def f_diff(A, B, C, cas,formulation, prm):
         Cr0[c] = C_act[0]
         
         if formulation == "mms":
-            Cr0[c] = C_act[40]
+            Cr0[c] = C_act[int((prm.N-1)/2)]
         
         c += 1
     
@@ -249,3 +254,20 @@ def f_Linf(C_act, C_anal):
     
     
     return L_inf
+
+#%%========================= FONCTION delta_r ==========================%%#
+def f_delta_r(prm):
+    
+    delta_r = prm.R/(prm.N-1)
+    
+    return delta_r
+
+#%%========================= FONCTION delta_t ==========================%%#
+def f_delta_t(prm):
+    
+    delta_t = prm.delta_r**2/(2*prm.D)
+    
+    return delta_t
+
+
+
