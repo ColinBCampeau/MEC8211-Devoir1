@@ -74,13 +74,13 @@ C_mms_2, Cr0_mms_2 = f_diff(D,E,F,2,"mms",prm)
 
 #%%========================= SOLUTION COMSOL ==========================%%#
 
-df = pd.read_csv('Comsol_profil_81_1e5.csv', delimiter=";")
+df = pd.read_csv('../data/Comsol_profil_81_1e5.csv', delimiter=";")
 data = df["c"].to_numpy()
 position = df["R"].to_numpy()
 fct_comsol = sp.interpolate.interp1d(position,data,kind='quadratic')
 sol_comsol = fct_comsol(vec_r)
 
-dft = pd.read_csv('Sol_Comsol_temporel_1e5.csv', delimiter=";")
+dft = pd.read_csv('../data/Sol_Comsol_temporel_1e5.csv', delimiter=";")
 data_t = dft["Concentration"].to_numpy()
 temps = dft["Time"].to_numpy()
 fct_comsol_temporel = sp.interpolate.interp1d(temps,data_t,kind='quadratic')
