@@ -130,7 +130,7 @@ if (abs(poro_eff-poro)>abs(poro_eff_old-poro))
     poro_eff=poro_eff_old;
 end
 
-dist_d=dist(1:nb_fiber);
+dist_d=sort(dist(1:nb_fiber),'descend');
 
 d_equivalent=(sum(dist_d.^2)/sum(dist_d))
 
